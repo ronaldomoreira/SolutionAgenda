@@ -11,6 +11,7 @@ using appAgenda.ViewModels.Agenda;
 using Repository.Repository;
 using Repository.Models;
 using Repository.Interface;
+using AutoMapper;
 
 namespace appAgenda.Controllers
 {
@@ -25,7 +26,10 @@ namespace appAgenda.Controllers
         // GET: ContatoViewModels
         public ActionResult Index()
         {
-            return View(_contatoRepository.ObterTodos());
+            var contatos = _contatoRepository.ObterTodos();
+            List<ContatoViewModel> listContatViewModel = Mapper.Map<List<ContatoViewModel>>(contatos);
+               
+            return View(listContatViewModel);
         }
 
         // GET: ContatoViewModels/Details/5
@@ -37,8 +41,9 @@ namespace appAgenda.Controllers
             }
 
             Contato contato = _contatoRepository.ObterPorId(id);
+            ContatoViewModel contatoViewModel = Mapper.Map<ContatoViewModel>(contato);
 
-            ContatoViewModel contatoViewModel = null;
+            if (contatoViewModel == null)
             {
                 return HttpNotFound();
             }
@@ -60,9 +65,8 @@ namespace appAgenda.Controllers
         {
             if (ModelState.IsValid)
             {
-                contatoViewModel.IdContato = Guid.NewGuid();
-                //arrumar
-                _contatoRepository.Adicionar(null);
+                Contato contato = Mapper.Map<Contato>(contatoViewModel);
+                _contatoRepository.Adicionar(contato);
                 _contatoRepository.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -79,13 +83,13 @@ namespace appAgenda.Controllers
             }
 
             Contato contato = _contatoRepository.ObterPorId(id);
-            
-            ContatoViewModel contatoViewModel = null; //db.ContatoViewModels.Find(id);
-
+            ContatoViewModel contatoViewModel = Mapper.Map<ContatoViewModel>(contato);
+ 
             if (contatoViewModel == null)
             {
                 return HttpNotFound();
             }
+
             return View(contatoViewModel);
         }
 
@@ -98,7 +102,7 @@ namespace appAgenda.Controllers
         {
             if (ModelState.IsValid)
             {
-                Contato contato = null;
+                Contato contato = Mapper.Map<Contato>(contatoViewModel);
                 _contatoRepository.Atualizar(contato);
                 _contatoRepository.SaveChanges();
 
@@ -117,8 +121,7 @@ namespace appAgenda.Controllers
             }
 
             Contato contato = _contatoRepository.ObterPorId(id);
-
-            ContatoViewModel contatoViewModel = null;
+            ContatoViewModel contatoViewModel = Mapper.Map<ContatoViewModel>(contato);
 
             if (contatoViewModel == null)
             {

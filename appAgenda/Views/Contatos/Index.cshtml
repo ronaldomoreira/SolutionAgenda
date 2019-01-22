@@ -1,0 +1,71 @@
+﻿@model IEnumerable<appAgenda.ViewModels.Agenda.ContatoViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table" id="tblContatos">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Endereco)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Empresa)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Endereco)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.IdContato }) |
+                @Html.ActionLink("Details", "Details", new { id = item.IdContato }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.IdContato })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#tblContatos').DataTable({
+                //"paging": false,
+                //"ordering": false,
+                //"info": false,
+                "searching": false,
+
+                "language": {
+                    "lengthMenu": "Mostrando _MENU_ registros por página",
+                    "zeroRecords": "Pesquis não retornou nenhum dado",
+                    "info": "Mostrado da página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros disponíveis",
+                    "infoFiltered": "(Filtrado de _MAX_ )",
+                    "paginate": {
+                        "previous": "Anterior",
+                        "next": "Próxima",
+                    }
+                }
+            });
+        });
+    </script>
+}
+
