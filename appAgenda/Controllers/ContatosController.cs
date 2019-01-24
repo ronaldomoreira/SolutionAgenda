@@ -12,6 +12,7 @@ using Repository.Repository;
 using Repository.Models;
 using Repository.Interface;
 using AutoMapper;
+using Newtonsoft.Json;
 
 namespace appAgenda.Controllers
 {
@@ -30,6 +31,26 @@ namespace appAgenda.Controllers
             List<ContatoViewModel> listContatViewModel = Mapper.Map<List<ContatoViewModel>>(contatos);
                
             return View(listContatViewModel);
+        }
+
+        public JsonResult ContatosDataTable()
+        {
+            var contatos = _contatoRepository.ObterTodos();
+            List<ContatoViewModel> listContatViewModel = Mapper.Map<List<ContatoViewModel>>(contatos);
+
+            //ViewBag.records = listContatViewModel.Count;
+            //return Json(new { data = lstEmployees }, JsonRequestBehavior.AllowGet);
+
+            return Json(
+                new {
+                    recordsTotal = listContatViewModel.Count,
+                    recordsFiltered = 10,
+                    data = listContatViewModel
+                }, 
+                JsonRequestBehavior.AllowGet
+            );
+
+ 
         }
 
         // GET: ContatoViewModels/Details/5
